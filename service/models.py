@@ -1,5 +1,5 @@
 """
-Models for YourResourceModel
+Models for Customer
 
 All of the models are stored in this module
 """
@@ -18,7 +18,7 @@ class DataValidationError(Exception):
     pass
 
 
-class YourResourceModel(db.Model):
+class Customer(db.Model):
     """
     Class that represents a <your resource model name>
     """
@@ -28,6 +28,10 @@ class YourResourceModel(db.Model):
     # Table Schema
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(63))
+    address = db.Column(db.String(256), nullable=False)
+    phone_number = db.Column(db.String(63), nullable=False)
+    email = db.Column(db.String(63), nullable=False)
+    credit_card = db.Column(db.String(63), nullable=False)
 
     def __repr__(self):
         return "<CustomersModel %r id=[%s]>" % (self.name, self.id)
@@ -56,7 +60,14 @@ class YourResourceModel(db.Model):
 
     def serialize(self):
         """ Serializes a CustomersModel into a dictionary """
-        return {"id": self.id, "name": self.name}
+        return {
+            "id": self.id, 
+            "name": self.name,
+            "address": self.address,
+            "phone_number": self.phone_number,
+            "email": self.email,
+            "credit_card": self.credit_card
+            }
 
     def deserialize(self, data):
         """
@@ -67,6 +78,10 @@ class YourResourceModel(db.Model):
         """
         try:
             self.name = data["name"]
+            self.address = data["address"]
+            self.phone_number = data["phone_number"]
+            self.email = data["email"]
+            self.credit_card = data["credit_card"]
         except KeyError as error:
             raise DataValidationError(
                 "Invalid CustomersModel: missing " + error.args[0]

@@ -1,22 +1,31 @@
 """
-Test cases for YourResourceModel Model
+Test cases for Customer Model
 
 """
 import logging
 import unittest
 import os
-from service.models import YourResourceModel, DataValidationError, db
+from service.models import Customer, DataValidationError, db
+from service import app
+
+DATABASE_URI = os.getenv(
+    "DATABASE_URI", "postgres://postgres:postgres@localhost:5432/postgres"
+)
 
 ######################################################################
-#  <your resource name>   M O D E L   T E S T   C A S E S
+#  CUSTOMER   M O D E L   T E S T   C A S E S
 ######################################################################
-class TestYourResourceModel(unittest.TestCase):
-    """ Test Cases for YourResourceModel Model """
+class TestCustomer(unittest.TestCase):
+    """ Test Cases for Customer Model """
 
     @classmethod
     def setUpClass(cls):
         """ This runs once before the entire test suite """
-        pass
+        app.config["TESTING"] = True
+        app.config["DEBUG"] = False
+        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
+        app.logger.setLevel(logging.CRITICAL)
+        Customer.init_db(app)
 
     @classmethod
     def tearDownClass(cls):
@@ -25,11 +34,13 @@ class TestYourResourceModel(unittest.TestCase):
 
     def setUp(self):
         """ This runs before each test """
-        pass
+        db.drop_all()  # clean up the last tests
+        db.create_all()  # make our sqlalchemy tables
 
     def tearDown(self):
         """ This runs after each test """
-        pass
+        db.session.remove()
+        db.drop_all()
 
     ######################################################################
     #  T E S T   C A S E S
