@@ -46,6 +46,16 @@ class TestCustomer(unittest.TestCase):
     #  T E S T   C A S E S
     ######################################################################
 
+    def test_create_a_customer(self):
+        """ Create a customer and assert that it exists """
+        customer = Customer(name="Alex", address="Washington Square Park", phone_number="555-555-1234", credit_card="VISA")
+        self.assertTrue(customer != None)
+        self.assertEqual(customer.id, None)
+        self.assertEqual(customer.name, "Alex")
+        self.assertEqual(customer.address, "Washington Square Park")
+        self.assertEqual(customer.phone_number, "555-555-1234")
+        self.assertEqual(customer.credit_card, "VISA")   
+    
     def test_XXXX(self):
         """ Test something """
         self.assertTrue(True)
