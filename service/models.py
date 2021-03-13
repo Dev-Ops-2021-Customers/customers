@@ -38,7 +38,7 @@ class Customer(db.Model):
 
     def create(self):
         """
-        Creates a CustomersModel to the database
+        Creates a Customer to the database
         """
         logger.info("Creating %s", self.name)
         self.id = None  # id must be none to generate next primary key
@@ -47,19 +47,19 @@ class Customer(db.Model):
 
     def save(self):
         """
-        Updates a CustomersModel to the database
+        Updates a Customer to the database
         """
         logger.info("Saving %s", self.name)
         db.session.commit()
 
     def delete(self):
-        """ Removes a CustomersModel from the data store """
+        """ Removes a Customer from the data store """
         logger.info("Deleting %s", self.name)
         db.session.delete(self)
         db.session.commit()
 
     def serialize(self):
-        """ Serializes a CustomersModel into a dictionary """
+        """ Serializes a Customer into a dictionary """
         return {
             "id": self.id, 
             "name": self.name,
