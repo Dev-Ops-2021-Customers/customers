@@ -54,8 +54,4 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(customer.name, "Alex")
         self.assertEqual(customer.address, "Washington Square Park")
         self.assertEqual(customer.phone_number, "555-555-1234")
-        self.assertEqual(customer.credit_card, "VISA")   
-    
-    def test_XXXX(self):
-        """ Test something """
-        self.assertTrue(True)
+        self.assertEqual(customer.credit_card, "VISA")
