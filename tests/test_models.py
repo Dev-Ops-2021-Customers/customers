@@ -48,14 +48,36 @@ class TestCustomer(unittest.TestCase):
 
     def test_create_a_customer(self):
         """ Create a customer and assert that it exists """
-        customer = Customer(name="Alex", address="Washington Square Park", phone_number="555-555-1234", credit_card="VISA")
+        customer = Customer(
+            name="Alex",
+            address="Washington Square Park",
+            phone_number="555-555-1234",
+            email="alex@jr.com",
+            credit_card="VISA"
+            )
         self.assertTrue(customer != None)
         self.assertEqual(customer.id, None)
         self.assertEqual(customer.name, "Alex")
         self.assertEqual(customer.address, "Washington Square Park")
         self.assertEqual(customer.phone_number, "555-555-1234")
-        self.assertEqual(customer.credit_card, "VISA")   
-    
-    def test_XXXX(self):
-        """ Test something """
-        self.assertTrue(True)
+        self.assertEqual(customer.email, "alex@jr.com")
+        self.assertEqual(customer.credit_card, "VISA")
+
+    def test_add_a_customer(self):
+        """ Create a customer and add it to the database """
+        customers = Customer.all()
+        self.assertEqual(customers, [])
+        customer = Customer(
+            name="Alex",
+            address="Washington Square Park",
+            phone_number="555-555-1234",
+            email="alex@jr.com",
+            credit_card="VISA"
+        )
+        self.assertTrue(customer != None)
+        self.assertEqual(customer.id, None)
+        customer.create()
+        # Asert that it was assigned an id and shows up in the database
+        self.assertEqual(customer.id, 1)
+        customers = Customer.all()
+        self.assertEqual(len(customers), 1)
