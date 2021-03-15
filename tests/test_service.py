@@ -91,3 +91,17 @@ class TestCustomerServer(TestCase):
         # self.assertEqual(
         #     new_customer["available"], test_customer.available, "Availability does not match"
         # )
+
+        def test_delete_customer(self):
+            """ Delete a Customer """
+            test_customer = self._create_customers(1)[0]
+            resp = self.app.delete(
+            "/customers/{}".format(test_customer.id), content_type="application/json"
+            )
+            self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+            self.assertEqual(len(resp.data), 0)
+            # make sure they are deleted
+            esp = self.app.get(
+            "/customers/{}".format(test_customer.id), content_type="application/json"
+            )
+            self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
