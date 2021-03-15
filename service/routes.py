@@ -131,7 +131,7 @@ def create_customers():
     )
 
 ######################################################################
-# DELETE A PET
+# DELETE A CUSTOMER
 ######################################################################
 
 @app.route("/customers/<int:customer_id>", methods=["DELETE"])
