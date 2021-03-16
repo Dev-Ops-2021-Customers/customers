@@ -42,6 +42,17 @@ class TestCustomer(unittest.TestCase):
         db.session.remove()
         db.drop_all()
 
+    def _create_customer(self, customer_name="Alex"):
+        """ Create a new Customer """
+        test_customer = Customer(
+            name=customer_name,
+            address="Washington Square Park",
+            phone_number="555-555-1234",
+            email="alex@jr.com",
+            credit_card="VISA"
+        )
+        return test_customer 
+
     ######################################################################
     #  T E S T   C A S E S
     ######################################################################
@@ -82,6 +93,27 @@ class TestCustomer(unittest.TestCase):
         customers = Customer.all()
         self.assertEqual(len(customers), 1)
 
+
+    def test_update_a_customer(self):
+        """ Update a Customer """
+        customer = self._create_customer()
+        customer.create()
+        logging.debug(customer)
+        logging.debug(customer)
+        self.assertEqual(customer.id, 1)
+        # Change it an save it
+        customer.address = "Union Square"
+        original_id = customer.id
+        customer.save()
+        self.assertEqual(customer.id, original_id)
+        self.assertEqual(customer.address, "Union Square")
+        # Fetch it back and make sure the id hasn't changed
+        # but the data did change
+        customers = Customer.all()
+        self.assertEqual(len(customers), 1)
+        self.assertEqual(customers[0].id, 1)
+        self.assertEqual(customers[0].address, "Union Square")
+
     def test_delete_a_customer(self):
         """ Delete a Customer """
         customer = Customer(
@@ -96,3 +128,4 @@ class TestCustomer(unittest.TestCase):
         # delete the customer and make sure it isn't in the database
         customer.delete()
         self.assertEqual(len(Customer.all()), 0)
+
