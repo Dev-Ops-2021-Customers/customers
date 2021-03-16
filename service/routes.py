@@ -131,6 +131,22 @@ def create_customers():
     )
 
 ######################################################################
+# DELETE A CUSTOMER
+######################################################################
+
+@app.route("/customers/<int:customer_id>", methods=["DELETE"])
+def delete_customers(customer_id):
+    """
+    Delete a Customer
+    This endpoint will delete a Customer based the id specified in the path
+    """
+    app.logger.info("Request to delete customer with id: %s", customer_id)
+    customer = Customer.find(customer_id)
+    if customer:
+        customer.delete()
+    return make_response("", status.HTTP_204_NO_CONTENT)
+
+######################################################################
 # LIST ALL CUSTOMERS
 ######################################################################
 @app.route("/customers", methods=["GET"])
@@ -142,7 +158,6 @@ def list_customers():
 
     results = [customer.serialize() for customer in customers]
     return make_response(jsonify(results), status.HTTP_200_OK)
-
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
