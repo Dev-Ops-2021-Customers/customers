@@ -120,7 +120,7 @@ class TestCustomerServer(TestCase):
 
     def test_update_customer(self):
         """ Update an existing Customer """
-        # create a customer to update
+        # create a customer to update 
         test_customer = self._create_customers("Alex")
         resp = self.app.post(
             "/customers", json=test_customer.serialize(), content_type="application/json"
