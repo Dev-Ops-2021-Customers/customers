@@ -13,7 +13,7 @@ DATABASE_URI = os.getenv(
 )
 
 ######################################################################
-#  CUSTOMER   M O D E L   T E S T   C A S E S
+#  C U S T O M E R   M O D E L   T E S T   C A S E S
 ######################################################################
 class TestCustomer(unittest.TestCase):
     """ Test Cases for Customer Model """
@@ -113,3 +113,19 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(len(customers), 1)
         self.assertEqual(customers[0].id, 1)
         self.assertEqual(customers[0].address, "Union Square")
+
+    def test_delete_a_customer(self):
+        """ Delete a Customer """
+        customer = Customer(
+            name="Alex",
+            address="Washington Square Park",
+            phone_number="555-555-1234",
+            email="alex@jr.com",
+            credit_card="VISA"
+        )
+        customer.create()
+        self.assertEqual(len(Customer.all()), 1)
+        # delete the customer and make sure it isn't in the database
+        customer.delete()
+        self.assertEqual(len(Customer.all()), 0)
+

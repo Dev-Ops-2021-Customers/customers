@@ -9,6 +9,7 @@ import sys
 import logging
 from flask import Flask, jsonify, request, url_for, make_response, abort
 from flask_api import status  # HTTP Status Codes
+from werkzeug.exceptions import NotFound
 
 # For this example we'll use SQLAlchemy, a popular ORM that supports a
 # variety of backends including SQLite, MySQL, and PostgreSQL
@@ -96,7 +97,7 @@ def internal_server_error(error):
     )
 
 ######################################################################
-# GET INDEX
+# G E T  I N D E X
 ######################################################################
 @app.route("/")
 def index():
@@ -110,7 +111,7 @@ def index():
     )
 
 ######################################################################
-# CREATE A CUSTOMER
+# C R E A T E  A  C U S T O M E R
 ######################################################################
 @app.route("/customers", methods=["POST"])
 def create_customers():
@@ -124,14 +125,44 @@ def create_customers():
     customer.deserialize(request.get_json())
     customer.create()
     message = customer.serialize()
-    # location_url = url_for("get_customers", customer_id=customer.id, _external=True)
-    location_url = "not implemented"
+    location_url = url_for("get_customers", customer_id=customer.id, _external=True)
     return make_response(
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
 
 ######################################################################
-# LIST ALL CUSTOMERS
+# R E T R I E V E  A  C U S T O M E R
+######################################################################
+@app.route("/customers/<int:customer_id>", methods=["GET"])
+def get_customers(customer_id):
+    """
+    Retrieve a single Customer
+    This endpoint will return a Customer based on it's id
+    """
+    app.logger.info("Request for customer with id: %s", customer_id)
+    customer = Customer.find(customer_id)
+    if not customer:
+        raise NotFound("Customer with id '{}' was not found.".format(customer_id))
+    return make_response(jsonify(customer.serialize()), status.HTTP_200_OK)
+
+######################################################################
+# D E L E T E  A  C U S T O M E R
+######################################################################
+
+@app.route("/customers/<int:customer_id>", methods=["DELETE"])
+def delete_customers(customer_id):
+    """
+    Delete a Customer
+    This endpoint will delete a Customer based the id specified in the path
+    """
+    app.logger.info("Request to delete customer with id: %s", customer_id)
+    customer = Customer.find(customer_id)
+    if customer:
+        customer.delete()
+    return make_response("", status.HTTP_204_NO_CONTENT)
+
+######################################################################
+# L I S T  A L L  C U S T O M E R S
 ######################################################################
 @app.route("/customers", methods=["GET"])
 def list_customers():
