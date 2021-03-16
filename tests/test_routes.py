@@ -87,6 +87,28 @@ class TestCustomerServer(TestCase):
         data = resp.get_json()
         self.assertEqual(len(data), 3)
 
+    def test_update_customer(self):
+        """ Update an existing Customer """
+        # create a customer to update
+        test_customer = self._create_customer("Alex")
+        
+        resp = self.app.post(
+            "/customers", json=test_customer.serialize(), content_type="application/json"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        
+        # update the customer
+        new_customer = resp.get_json()
+        logging.debug(new_customer)
+        new_customer["address"] = "unknown"
+        resp = self.app.put(
+            "/customers/{}".format(new_customer["id"]),
+            json=new_customer,
+            content_type="application/json",
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        updated_customer = resp.get_json()
+        self.assertEqual(updated_customer["address"], "unknown")
     
         # # Make sure location header is set
         # location = resp.headers.get("Location", None)
