@@ -130,6 +130,18 @@ def create_customers():
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
 
+######################################################################
+# LIST ALL CUSTOMERS
+######################################################################
+@app.route("/customers", methods=["GET"])
+def list_customers():
+    """ Returns all of the Customers """
+    app.logger.info("Request for customer list")
+    
+    customers = Customer.all()
+
+    results = [customer.serialize() for customer in customers]
+    return make_response(jsonify(results), status.HTTP_200_OK)
 
 
 ######################################################################

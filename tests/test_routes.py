@@ -43,9 +43,29 @@ class TestCustomerServer(TestCase):
         db.session.remove()
         db.drop_all()
 
+    def _create_customer(self, customer_name="Alex"):
+        """ Create a new Customer """
+        test_customer = Customer(
+            name=customer_name,
+            address="Washington Square Park",
+            phone_number="555-555-1234",
+            email="alex@jr.com",
+            credit_card="VISA"
+        )
+        return test_customer 
+
     ######################################################################
     #  P L A C E   T E S T   C A S E S   H E R E
     ######################################################################
+
+    def test_create_customer(self):
+        """ Create a new Customer """
+        test_customer = self._create_customer("Alex")
+        logging.debug(test_customer)
+        resp = self.app.post(
+            "/customers", json=test_customer.serialize(), content_type="application/json"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
     def test_index(self):
         """ Test index call """
@@ -54,20 +74,20 @@ class TestCustomerServer(TestCase):
         data = resp.get_json()
         self.assertEqual(data["name"], "Customers Demo REST API Service")
 
-    def test_create_customer(self):
-        """ Create a new Customer """
-        test_customer = Customer(
-            name="Alex",
-            address="Washington Square Park",
-            phone_number="555-555-1234",
-            email="alex@jr.com",
-            credit_card="VISA"
-        )
-        logging.debug(test_customer)
-        resp = self.app.post(
-            "/customers", json=test_customer.serialize(), content_type="application/json"
-        )
-        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+    def test_get_customer_list(self):
+        """ Get a list of Customers """
+        customer = self._create_customer("Alex")
+        customer.create()
+        customer = self._create_customer("Sally")
+        customer.create()
+        customer = self._create_customer("John")
+        customer.create()
+        resp = self.app.get("/customers")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), 3)
+
+    
         # # Make sure location header is set
         # location = resp.headers.get("Location", None)
         # self.assertIsNotNone(location)
