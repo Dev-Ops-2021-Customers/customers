@@ -169,4 +169,35 @@ class TestCustomerServer(TestCase):
         resp = self.app.get(
         "/customers/{}".format(test_customer.id), content_type="application/json"
         )
-        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)    
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_bad_request(self):
+        """ Send bad request """
+        customer = self._create_customers()
+        customer.create()
+        resp = self.app.post(
+            "/customers", 
+            json={"name": "not enough data"}, 
+            content_type="application/json"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_unsupported_media_type(self):
+        """ Send unsupported media type """
+        customer = self._create_customers()
+        customer.create()
+        resp = self.app.post(
+            "/customers", 
+            json=customer.serialize(), 
+            content_type="test/html"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
+    def test_method_not_allowed(self):
+        """ Make an illegal method call """
+        resp = self.app.put(
+            "/customers", 
+            json={"not": "today"}, 
+            content_type="application/json"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
