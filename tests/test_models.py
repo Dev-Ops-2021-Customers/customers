@@ -44,14 +44,23 @@ class TestCustomer(unittest.TestCase):
 
     def _create_customer(self, customer_name="Alex"):
         """ Create a new Customer """
-        test_customer = Customer(
+        return Customer(
             name=customer_name,
             address="Washington Square Park",
             phone_number="555-555-1234",
             email="alex@jr.com",
             credit_card="VISA"
         )
-        return test_customer 
+
+    def _create_customers(self, count):
+        """ Factory method to create customers in bulk """
+        customers = []
+        for _ in range(count):
+            test_customer = self._create_customer()
+            customers.append(test_customer)
+        return customers
+
+        # return test_customer 
 
     ######################################################################
     #  T E S T   C A S E S
@@ -93,12 +102,11 @@ class TestCustomer(unittest.TestCase):
         customers = Customer.all()
         self.assertEqual(len(customers), 1)
 
-
+ 
     def test_update_a_customer(self):
         """ Update a Customer """
         customer = self._create_customer()
         customer.create()
-        logging.debug(customer)
         logging.debug(customer)
         self.assertEqual(customer.id, 1)
         # Change it an save it
@@ -116,19 +124,13 @@ class TestCustomer(unittest.TestCase):
 
     def test_delete_a_customer(self):
         """ Delete a Customer """
-        customer = Customer(
-            name="Alex",
-            address="Washington Square Park",
-            phone_number="555-555-1234",
-            email="alex@jr.com",
-            credit_card="VISA"
-        )
+        customer = self._create_customer()
         customer.create()
         self.assertEqual(len(Customer.all()), 1)
         # delete the customer and make sure it isn't in the database
         customer.delete()
         self.assertEqual(len(Customer.all()), 0)
-
+        
     def test_serialize_a_customer(self):
         """ Test serialization of a Customer """
         customer = self._create_customer()
@@ -198,3 +200,17 @@ class TestCustomer(unittest.TestCase):
         customer = Customer.find_or_404(customer.id)
         self.assertEqual(customer.id, 1)
 
+    def test_find_customer(self):
+        """ Find a Customer by ID """
+        customers = self._create_customers(3)
+        for customer in customers:
+            customer.create()
+        logging.debug(customer)
+        # make sure they got saved
+        self.assertEqual(len(Customer.all()), 3)
+        # find the 2nd customer in the list
+        customer = Customer.find(customers[1].id)
+        self.assertIsNot(customer, None)
+        self.assertEqual(customer.id, customers[1].id)
+        self.assertEqual(customer.name, customers[1].name)
+    
