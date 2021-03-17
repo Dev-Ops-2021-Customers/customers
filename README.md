@@ -9,7 +9,7 @@ vagrant up
 vagrant ssh
 cd /vagrant/
 ```
-Then on your own machine, you can see by visiting: http://localhost:5000/
+To run on your own machine, you can see by visiting: http://localhost:5000/
 
-## Running the tests
+## Testing
 - Unit tests: `cd /vagrant/` -> `nosetests`
