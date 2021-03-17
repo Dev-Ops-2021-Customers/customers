@@ -129,3 +129,72 @@ class TestCustomer(unittest.TestCase):
         customer.delete()
         self.assertEqual(len(Customer.all()), 0)
 
+    def test_serialize_a_customer(self):
+        """ Test serialization of a Customer """
+        customer = self._create_customer()
+        customer.create()
+        data = customer.serialize()
+        self.assertNotEqual(data, None)
+        self.assertIn("id", data)
+        self.assertEqual(data["id"], customer.id)
+        self.assertIn("name", data)
+        self.assertEqual(data["name"], customer.name)
+        self.assertIn("address", data)
+        self.assertEqual(data["address"], customer.address)
+        self.assertIn("phone_number", data)
+        self.assertEqual(data["phone_number"], customer.phone_number)
+        self.assertIn("email", data)
+        self.assertEqual(data["email"], customer.email)
+        self.assertIn("credit_card", data)
+        self.assertEqual(data["credit_card"], customer.credit_card)
+
+    def test_deserialize_a_customer(self):
+        """ Test deserialization of a Customer """
+        data = {
+            "id": 1,
+            "name": "Alex",
+            "address": "Washington Square Park",
+            "phone_number": "555-555-1234",
+            "email": "alex@jr.com",
+            "credit_card": "VISA"
+        }
+        customer = Customer()
+        customer.deserialize(data)
+        self.assertNotEqual(customer, None)
+        self.assertEqual(customer.id, None)
+        self.assertEqual(customer.name, "Alex")
+        self.assertEqual(customer.address, "Washington Square Park")
+        self.assertEqual(customer.phone_number, "555-555-1234")
+        self.assertEqual(customer.email, "alex@jr.com")
+        self.assertEqual(customer.credit_card, "VISA")
+    
+    #Missing data is the credit_card
+    def test_deserialize_missing_data(self):
+        """ Test deserialization of a Customer, missing data"""
+        data = {
+            "id": 1,
+            "name": "Alex",
+            "address": "Washington Square Park",
+            "phone_number": "555-555-1234",
+            "email": "alex@jr.com",
+        }
+        customer = Customer()
+        self.assertRaises(DataValidationError, customer.deserialize, data)
+
+    def test_deserialize_bad_data(self):
+        """ Test deserialization of bad data """
+        data = "this is not a dictionary"
+        customer = Customer()
+        self.assertRaises(DataValidationError, customer.deserialize, data)
+
+    def test_find_or_404(self):
+        """ Find or throw 404 error """
+        customer = self._create_customer()
+        customer.create()
+        # Assert that it was assigned an id and shows up in the database
+        self.assertEqual(customer.id, 1)
+
+        # Fetch it back
+        customer = Customer.find_or_404(customer.id)
+        self.assertEqual(customer.id, 1)
+
