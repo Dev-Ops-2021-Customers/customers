@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/Dev-Ops-2021-Customers/customers.svg?branch=main)](https://travis-ci.com/Dev-Ops-2021-Customers/customers)
+
+
 # customers
 
 NYU DevOps Customers Team
