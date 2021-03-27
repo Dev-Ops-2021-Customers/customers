@@ -1,5 +1,7 @@
 ## Travis CI
 [![Build Status](https://travis-ci.com/Dev-Ops-2021-Customers/customers.svg?branch=main)](https://travis-ci.com/Dev-Ops-2021-Customers/customers)
+[![codecov](https://codecov.io/gh/Dev-Ops-2021-Customers/customers/branch/main/graph/badge.svg?token=CJVZ16WGW1)](https://codecov.io/gh/Dev-Ops-2021-Customers/customers)
+
 
 
 # customers
