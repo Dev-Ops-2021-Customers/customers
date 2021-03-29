@@ -32,6 +32,7 @@ class Customer(db.Model):
     phone_number = db.Column(db.String(63), nullable=False)
     email = db.Column(db.String(63), nullable=False)
     credit_card = db.Column(db.String(63), nullable=False)
+    active = db.Column(db.Boolean, nullable=False)
 
     def __repr__(self):
         return "<CustomersModel %r id=[%s]>" % (self.name, self.id)
@@ -66,7 +67,8 @@ class Customer(db.Model):
             "address": self.address,
             "phone_number": self.phone_number,
             "email": self.email,
-            "credit_card": self.credit_card
+            "credit_card": self.credit_card,
+            "active": self.active
             }
 
     def deserialize(self, data):
@@ -82,6 +84,7 @@ class Customer(db.Model):
             self.phone_number = data["phone_number"]
             self.email = data["email"]
             self.credit_card = data["credit_card"]
+            self.active = True
         except KeyError as error:
             raise DataValidationError(
                 "Invalid CustomersModel: missing " + error.args[0]

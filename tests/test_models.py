@@ -49,8 +49,10 @@ class TestCustomer(unittest.TestCase):
             address="Washington Square Park",
             phone_number="555-555-1234",
             email="alex@jr.com",
-            credit_card="VISA"
+            credit_card="VISA",
+            active = True
         )
+            # added active = True to the _create_customer definition
 
     def _create_customers(self, count):
         """ Factory method to create customers in bulk """
@@ -92,7 +94,8 @@ class TestCustomer(unittest.TestCase):
             address="Washington Square Park",
             phone_number="555-555-1234",
             email="alex@jr.com",
-            credit_card="VISA"
+            credit_card="VISA",
+            active = True
         )
         self.assertTrue(customer != None)
         self.assertEqual(customer.id, None)
