@@ -50,7 +50,8 @@ class TestCustomerServer(TestCase):
             address="Washington Square Park",
             phone_number="555-555-1234",
             email="alex@jr.com",
-            credit_card="VISA"
+            credit_card="VISA",
+            active = True
         )
         return test_customer 
 
@@ -87,6 +88,9 @@ class TestCustomerServer(TestCase):
         self.assertEqual(
             new_customer["credit_card"], test_customer.credit_card, "Credit card does not match"
         )
+        self.assertEqual(
+            new_customer['active'], True, "active status not match"
+        )
         # # # Check that the location header was correct
         resp = self.app.get(location, content_type="application/json")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
@@ -96,6 +100,7 @@ class TestCustomerServer(TestCase):
         self.assertEqual(new_customer["phone_number"], test_customer.phone_number)
         self.assertEqual(new_customer["email"], test_customer.email)
         self.assertEqual(new_customer["credit_card"], test_customer.credit_card)
+        self.assertEqual(new_customer['active'], True, "active status not match")
 
 
     def test_index(self):
@@ -201,3 +206,31 @@ class TestCustomerServer(TestCase):
             content_type="application/json"
         )
         self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_deactivate_customer(self):
+        """ Deactivate an existing customer """
+        #create a customer to deactivate
+        body = {
+           "name": "Robin",
+           "address": "222 Bleeker Street",
+           "phone_number": "555-555-2222",
+           "email": "rarzon@peloton.com",
+           "credit_card": "VISA"
+        }
+        
+        #test_customer = self._create_customers("Alex")
+        #logging.debug(test_customer)
+        #test_customer.create()    
+        resp_create = self.app.post('/customers',
+                            json=body,
+                            content_type='application/json')
+        self.assertEqual(resp_create.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(resp_create.get_json()['active'], True)
+        customer_id = resp_create.get_json()["id"]
+
+        # deactivate the customer
+        logging.debug(customer_id)
+        resp_deactivate = self.app.put("/customers/{}/deactivate".format(customer_id),
+                            content_type="application/json")
+        self.assertEqual(resp_deactivate.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp_deactivate.get_json()["active"], False)

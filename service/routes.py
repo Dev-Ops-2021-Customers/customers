@@ -194,6 +194,24 @@ def update_customers(customer_id):
     return make_response(jsonify(customer.serialize()), status.HTTP_200_OK)
 
 
+######################################################################
+# DEACTIVATE AN EXISTING CUSTOMER
+######################################################################
+@app.route("/customers/<int:customer_id>/deactivate", methods=["PUT"])
+def deactivate(customer_id):
+    """
+    Deactivate a Customer
+    This endpoint will deactivate a Customer
+    """
+    app.logger.info('Request to deactivate customer with id: %s', customer_id)
+    customer = Customer.find(customer_id)
+    if not customer:
+        app.abort(status.HTTP_404_NOT_FOUND, "Customer with id '{}' was not found".format(customer_id))
+    customer.user_id = customer_id
+    customer.active = False
+    customer.save()
+    return make_response(jsonify(customer.serialize()), status.HTTP_200_OK)
+
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
