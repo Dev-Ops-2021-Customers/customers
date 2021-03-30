@@ -118,6 +118,20 @@ class TestCustomerServer(TestCase):
         data = resp.get_json()
         self.assertEqual(len(data), 3)
 
+    def test_get_customer_by_name(self):
+        """ Get a Customer by Name """
+        test_customer = self._create_customers("Alex")
+        test_customer.create()
+        test_customer = self._create_customers("Sally")
+        test_customer.create()
+        test_customer = self._create_customers("John")
+        test_customer.create()
+        resp = self.app.get("/customers?name={}".format("John"))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]["name"], test_customer.name)
+
     def test_update_customer(self):
         """ Update an existing Customer """
         # create a customer to update 
