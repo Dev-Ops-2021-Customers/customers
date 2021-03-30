@@ -168,8 +168,12 @@ def delete_customers(customer_id):
 def list_customers():
     """ Returns all of the Customers """
     app.logger.info("Request for customer list")
-    
-    customers = Customer.all()
+    customers = []
+    name = request.args.get("name")
+    if name:
+        customers = Customer.find_by_name(name)
+    else:
+        customers = Customer.all()
 
     results = [customer.serialize() for customer in customers]
     return make_response(jsonify(results), status.HTTP_200_OK)
