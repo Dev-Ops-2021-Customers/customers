@@ -248,3 +248,37 @@ class TestCustomerServer(TestCase):
                             content_type="application/json")
         self.assertEqual(resp_deactivate.status_code, status.HTTP_200_OK)
         self.assertEqual(resp_deactivate.get_json()["active"], False)
+
+
+    def test_activate_customer(self):
+        """ Activate an existing customer """
+        # create a customer to activate
+        body = {
+            "name": "Kendall",
+            "address": "333 Bedford Street",
+            "phone_number": "555-555-3333",
+            "email": "ktoole@peloton.com",
+            "credit_card": "VISA"
+        }
+        resp_create = self.app.post('/customers',
+                            json=body,
+                            content_type='application/json')
+        self.assertEqual(resp_create.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(resp_create.get_json()['active'], True)
+        customer_id = resp_create.get_json()["id"]
+
+        # deactivate the customer
+        logging.debug(customer_id)
+        resp_deactivate = self.app.put("/customers/{}/deactivate".format(customer_id),
+                            json=body,
+                            content_type="application/json")
+        self.assertEqual(resp_deactivate.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp_deactivate.get_json()["active"], False)
+
+        # activate the customer
+        logging.debug(customer_id)
+        resp_activate = self.app.put("/customers/{}/activate".format(customer_id),
+                            json=body,
+                            content_type="application/json")
+        self.assertEqual(resp_activate.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp_activate.get_json()["active"], True)

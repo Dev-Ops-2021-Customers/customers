@@ -216,6 +216,24 @@ def deactivate(customer_id):
     customer.save()
     return make_response(jsonify(customer.serialize()), status.HTTP_200_OK)
 
+######################################################################
+# ACTIVATE A CUSTOMER
+######################################################################
+
+@app.route("/customers/<int:customer_id>/activate", methods=["PUT"])
+def activate(customer_id):
+    """
+    Activate a Customer
+    This endpoint will activate a Customer
+    """
+    app.logger.info('Request to activate customer with id: %s', customer_id)
+    customer = Customer.find(customer_id)
+    if not customer:
+        app.abort(status.HTTP_404_NOT_FOUND, "Customer with id '{}' was not found".format(customer_id))
+    customer.customer_id = customer_id
+    customer.active = True
+    customer.save()
+    return make_response(jsonify(customer.serialize()), status.HTTP_200_OK)
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
