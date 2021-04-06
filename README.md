@@ -26,6 +26,7 @@ To run on your own machine, you can see by visiting: http://localhost:5000/
 vagrant up
 vagrant ssh
 cd /vagrant
+honcho start
 ```
 
 ## Testing
@@ -53,3 +54,9 @@ vagrant halt
 
 #### **List**
 - **GET** `/customers`
+
+#### **Deactivate**
+- **PUT** `/customers/{}/deactivate`
+
+#### **Activate**
+- **PUT** `/customers/{}/activate`
