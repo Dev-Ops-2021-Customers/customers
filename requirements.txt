@@ -6,6 +6,10 @@ Flask-SQLAlchemy==2.4.4
 python-dotenv==0.10.3
 psycopg2-binary==2.8.4
 
+# runtime
+gunicorn==19.9.0
+honcho==1.0.1
+
 # Testing
 nose==1.3.7
 rednose==1.3.0
