@@ -55,6 +55,9 @@ vagrant halt
 #### **List**
 - **GET** `/customers`
 
+#### **Find by Name**
+- **GET** `/customers?name={search criteria}`
+
 #### **Deactivate**
 - **PUT** `/customers/{}/deactivate`
 
