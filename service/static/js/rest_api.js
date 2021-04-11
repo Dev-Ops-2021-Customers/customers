@@ -88,8 +88,7 @@ $(function () {
         var email = $("#customer_email").val();
         var credit_card = $("#customer_credit_card").val();
         var active = $("#customer_active").val() == "true";
-     
-        
+            
 
         var data = {
             "name": name,
@@ -180,4 +179,61 @@ $(function () {
         clear_form_data()
     });
 
+    // ****************************************
+    // Search for a Customer
+    // ****************************************
+
+    $("#search-btn").click(function () {
+
+        var name = $("#customer_name").val();
+
+        var queryString = ""
+
+        if (name) {
+            queryString += 'name=' + name
+        }
+
+        var ajax = $.ajax({
+            type: "GET",
+            url: "/customers?" + queryString,
+            contentType: "application/json",
+            data: ''
+        })
+
+        ajax.done(function(res){
+            //alert(res.toSource())
+            $("#search_results").empty();
+            $("#search_results").append('<table class="table-striped" cellpadding="10">');
+            var header = '<tr>'
+            header += '<th style="width:10%">ID</th>'
+            header += '<th style="width:40%">Name</th>'
+            header += '<th style="width:40%">Address</th>'
+            header += '<th style="width:10%">Phone Number</th>'
+            header += '<th style="width:10%">Email</th>'
+            header += '<th style="width:10%">Credit Card</th>'
+            $("#search_results").append(header);
+            var firstCustomer = "";
+            for(var i = 0; i < res.length; i++) {
+                var customer = res[i];
+                var row = "<tr><td>"+customer.id+"</td><td>"+customer.name+"</td><td>"+customer.address+"</td><td>"+customer.phone_number+"</td><td>"+customer.email+"</td><td>"+customer.credit_card+"</td></tr>";
+                $("#search_results").append(row);
+                if (i == 0) {
+                    firstCustomer = customer;
+                }
+            }
+
+            $("#search_results").append('</table>');
+
+            // copy the first result to the form
+            if (firstCustomer != "") {
+                update_form_data(firstCustomer)
+            }
+
+            flash_message("Success")
+        });
+
+        ajax.fail(function(res){
+            flash_message(res.responseJSON.message)
+        });
+    })
 })
