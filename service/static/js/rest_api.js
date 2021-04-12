@@ -155,7 +155,7 @@ $(function () {
 
         var ajax = $.ajax({
             type: "DELETE",
-            url: "/customers/" + customer_id,
+            url: "/customers/" + customer_id + "/deactivate",
             contentType: "application/json",
             data: '',
         })
@@ -178,6 +178,63 @@ $(function () {
         $("#customer_id").val("");
         clear_form_data()
     });
+
+    // ****************************************
+    // Deactivate a Customer
+    // ****************************************
+
+    $("#deactivate-btn").click(function () {
+
+        var customer_id = $("#customer_id").val();
+
+        var ajax = $.ajax({
+                type: "PUT",
+                url: "/customers/" + customer_id + "/deactivate",
+                contentType: "application/json"
+            })
+
+        ajax.done(function(res){
+            // console.log(res)
+            update_form_data(res)
+            flash_message("Customer deactivated.")
+            show_in_search_results_by_customer_id()
+        });
+
+        ajax.fail(function(res){
+            flash_message(res.responseJSON.message)
+        });
+
+    });
+
+
+    // ****************************************
+    // Activate a Customer
+    // ****************************************
+
+    $("#activate-btn").click(function () {
+
+        var customer_id = $("#customer_id").val();
+
+        var ajax = $.ajax({
+                type: "PUT",
+                url: "/customers/" + customer_id + "/activate",
+                contentType: "application/json"
+            })
+
+        ajax.done(function(res){
+            update_form_data(res)
+            flash_message("Customer activated.")
+            show_in_search_results_by_customer_id()
+        });
+
+        ajax.fail(function(res){
+            flash_message(res.responseJSON.message)
+        });
+
+    });
+
+
+
 
     // ****************************************
     // Search for a Customer
