@@ -1,8 +1,8 @@
 """
 Environment for Behave Testing
 """
-import os
-from behave import *
+from os import getenv
+#from behave import *
 from selenium import webdriver
 
 WAIT_SECONDS = int(getenv('WAIT_SECONDS', '60'))

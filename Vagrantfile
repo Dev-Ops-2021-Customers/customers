@@ -80,8 +80,8 @@ Vagrant.configure(2) do |config|
     apt-get update
     apt-get install -y git tree wget vim python3-dev python3-pip python3-venv apt-transport-https libpq-dev python3-selenium
     apt-get -y autoremove
-     # Install Chromium Driver
-     apt-get install -y chromium-chromedriver
+    # Install Chromium Driver
+    apt-get install -y chromium-chromedriver
 
     # Create a Python3 Virtual Environment and Activate it in .profile
     sudo -H -u vagrant sh -c 'python3 -m venv ~/venv'
