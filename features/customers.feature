@@ -5,11 +5,10 @@ Feature: The customer service back-end
 
 Background:
     Given the following customers
-        | customer_id |   name    |    address   | phone_number  |  email   |   credit_card  |
-        |     id1     |   name1   |    address1  | phone_number1 |  email1  |  credit_card1  |
-        |     id2     |   name2   |    address2  | phone_number2 |  email2  |  credit_card2  |
-        |     id3     |   name3   |    address3  | phone_number3 |  email3  |  credit_card3  |
-        |     id4     |   name4   |    address4  | phone_number4 |  email4  |  credit_card4  |
+        |    customer_id     |   name    |    address              | phone_number  |  email                |  credit_card   |
+        |    1               |   sam     |    123 palm springs rd  | 555-682-5832  |  sam@gnocci.com       |  VISA          |
+        |    2               |   steph   |    456 flay st          | 555-902-3948  |  steph@bobbyflay.com  |  VISA          |
+        |    3               |   kelly   |    789 miami ave        | 555-102-2948  |  kelly@catan.com      |  VISA          |
 
 Scenario: The server is running
     When I visit the "Home Page"
@@ -18,6 +17,7 @@ Scenario: The server is running
 
 Scenario: Create a Customer
     When I visit the "Home Page"
+    And I set the "customer_id" to "1"
     And I set the "name" to "Seba"
     And I set the "address" to "123 chile st"
     And I set the "phone_number" to "555-123-2364"
