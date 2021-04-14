@@ -23,12 +23,16 @@ ID_PREFIX = 'customer_'
 def step_impl(context):
     """ Delete all Customers and load new ones """
     headers = {'Content-Type': 'application/json'}
-    context.resp = requests.delete(context.base_url + '/customers', headers=headers)
+    context.resp = requests.get(context.base_url + '/customers', headers=headers)
     expect(context.resp.status_code).to_equal(200)
+    for customer in context.resp.json():
+        context.resp = requests.delete(context.base_url + '/customers/' + str(customer["id"]), headers=headers)
+        expect(context.resp.status_code).to_equal(204)
+
+    #load the database with new customers
     create_url = context.base_url + '/customers'
     for row in context.table:
         data = {
-            "customer_id": row['customer_id'],
             "name": row['name'],
             "address": row['address'],
             "phone_number": row['phone_number'],
@@ -37,7 +41,7 @@ def step_impl(context):
             }
         payload = json.dumps(data)
         context.resp = requests.post(create_url, data=payload, headers=headers)
-        expect(context.resp.status_code).to_equal(204)
+        expect(context.resp.status_code).to_equal(201)
 
 @when('I visit the "Home Page"')
 def step_impl(context):
@@ -56,7 +60,7 @@ def step_impl(context, message):
 
 @when('I set the "{element_name}" to "{text_string}"')
 def step_impl(context, element_name, text_string):
-    element_id = element_name.lower()
+    element_id = ID_PREFIX + element_name.lower()
     element = context.driver.find_element_by_id(element_id)
     element.clear()
     element.send_keys(text_string)
@@ -119,14 +123,14 @@ def step_impl(context, message):
 
 @then('the "{element_name}" field should be empty')
 def step_impl(context, element_name):
-    element_id = element_name.lower()
+    element_id = ID_PREFIX + element_name.lower()
     element = context.driver.find_element_by_id(element_id)
     expect(element.get_attribute('value')).to_be(u'')
 
 
 @then('I should see "{text_string}" in the "{element_name}" field')
 def step_impl(context, text_string, element_name):
-    element_id = element_name.lower()
+    element_id = ID_PREFIX + element_name.lower()
     # element = context.driver.find_element_by_id(element_id)
     # expect(element.get_attribute('value')).to_equal(text_string)
     found = WebDriverWait(context.driver, WAIT_SECONDS).until(
