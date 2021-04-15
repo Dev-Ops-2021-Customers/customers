@@ -6,7 +6,7 @@ $(function () {
 
     // Updates the form with data from the response
     function update_form_data(res) {
-        $("#customer_id").val(res.customer_id);
+        $("#customer_id").val(res.id);
         $("#customer_name").val(res.name);
         $("#customer_address").val(res.address);
         $("#customer_phone_number").val(res.phone_number);
@@ -98,6 +98,8 @@ $(function () {
             "credit_card": credit_card,
             "active": active
         };
+        
+        console.log(data);
 
         var ajax = $.ajax({
                 type: "PUT",
