@@ -65,6 +65,7 @@ Scenario: Delete a Customer
     And I press the "Delete" button
     Then I should see the message "Customer has been Deleted!"
 
+
 Scenario: Retrieve a Customer
     When I visit the "Home Page"
     And I set the "name" to "Sebastian"
