@@ -157,7 +157,7 @@ $(function () {
 
         var ajax = $.ajax({
             type: "DELETE",
-            url: "/customers/" + customer_id + "/deactivate",
+            url: "/customers/" + customer_id,
             contentType: "application/json",
             data: '',
         })

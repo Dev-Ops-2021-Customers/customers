@@ -40,6 +40,7 @@ Scenario: Create a Customer
     Then I should see "seba@franksinatra.com" in the "email" field
     Then I should see "VISA" in the "credit_card" field
 
+
 Scenario: Update a Customer
     When I visit the "Home Page"
     And I set the "name" to "sam"
@@ -57,3 +58,10 @@ Scenario: Update a Customer
     And I paste the "id" field
     And I press the "Retrieve" button
     Then I should see "samuel" in the "name" field
+
+Scenario: Delete a Customer
+    When I visit the "Home Page"
+    And I change "customer_id" to "1"
+    And I press the "Delete" button
+    Then I should see the message "Customer has been Deleted!"
+
