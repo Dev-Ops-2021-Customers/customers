@@ -40,6 +40,12 @@ Scenario: Create a Customer
     Then I should see "seba@franksinatra.com" in the "email" field
     Then I should see "VISA" in the "credit_card" field
 
+Scenario: List all customers
+    When I visit the "Home Page"
+    And I press the "Search" button
+    Then I should see "sam" in the results
+    And I should see "steph" in the results
+    And I should see "kelly" in the results
 
 Scenario: Update a Customer
     When I visit the "Home Page"
