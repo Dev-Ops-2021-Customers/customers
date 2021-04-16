@@ -98,6 +98,8 @@ Scenario: Retrieve a Customer
 
 Scenario: Deactivate a Customer
     When I visit the "Home Page"
+    And I set the "name" to "kelly"
+    And I press the "Search" button
     And I copy the "id" field
     And I press the "Clear" button
     And I paste the "id" field
@@ -107,6 +109,8 @@ Scenario: Deactivate a Customer
 
 Scenario: Activate a Customer
     When I visit the "Home Page"
+    And I set the "name" to "kelly"
+    And I press the "Search" button
     And I copy the "id" field
     And I press the "Clear" button
     And I paste the "id" field
