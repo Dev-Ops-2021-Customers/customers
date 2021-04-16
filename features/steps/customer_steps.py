@@ -111,7 +111,7 @@ def step_impl(context, name):
 
 @then('I should see the message "{message}"')
 def step_impl(context, message):
-    #context.driver.save_screenshot('debug.png')
+    context.driver.save_screenshot('debug.png')
     element = context.driver.find_element_by_id('flash_message')
     # expect(element.text).to_contain(message)
     found = WebDriverWait(context.driver, WAIT_SECONDS).until(
@@ -121,6 +121,13 @@ def step_impl(context, message):
         )
     )
     expect(found).to_be(True)
+
+
+@then('I should see "{text}" in the "{element_name}" dropdown')
+def step_impl(context, text, element_name):
+    element_id = ID_PREFIX + element_name.lower()
+    element = Select(context.driver.find_element_by_id(element_id))
+    expect(element.first_selected_option.text).to_equal(text)
 
 
 @then('the "{element_name}" field should be empty')
@@ -133,7 +140,7 @@ def step_impl(context, element_name):
 @then('I should see "{text_string}" in the "{element_name}" field')
 def step_impl(context, text_string, element_name):
     element_id = ID_PREFIX + element_name.lower()
-    # element = context.driver.find_element_by_id(element_id)
+    element = context.driver.find_element_by_id(element_id)
     # expect(element.get_attribute('value')).to_equal(text_string)
     found = WebDriverWait(context.driver, WAIT_SECONDS).until(
         expected_conditions.text_to_be_present_in_element_value(
