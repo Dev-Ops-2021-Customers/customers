@@ -28,9 +28,11 @@ vagrant ssh
 cd /vagrant
 honcho start
 ```
+On your own machine, visit: http://localhost:5000/
 
 ## Testing
 - Unit tests: `cd /vagrant/` -> `nosetests`
+- Integration tests: `cd /vagrant/` -> `nosetests` --> `honcho start` -> `behave`
 
 ## Shutdown Vagrant
 ```
