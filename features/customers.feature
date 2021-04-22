@@ -54,13 +54,6 @@ Scenario: List all customers with first name sam
     Then I should see "sam" in the results
     And I should not see "steph" in the results
 
-Scenario: List all customers with credit card VISA
-    When I visit the "Home Page"
-    And I set the "credit_card" to "VISA"
-    And I press the "Search" button
-    Then I should see "VISA" in the results
-    And I should not see "AMEX" in the results
-
 Scenario: Update a Customer
     When I visit the "Home Page"
     And I set the "name" to "sam"
