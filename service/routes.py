@@ -350,7 +350,6 @@ def update_customers(customer_id):
             - phone_number
             - email
             - credit_card
-            - activate
           properties:
             name:
                 type: string
@@ -367,9 +366,6 @@ def update_customers(customer_id):
             credit_card:
                 type: string
                 description: the credit card of customer (e.g., VISA)
-            active:
-                type: string
-                description: the status of customer (e.g., active)
     responses:
       200:
         description: Customer Updated
@@ -397,6 +393,23 @@ def deactivate(customer_id):
     """
     Deactivate a Customer
     This endpoint will deactivate a Customer
+    ---
+    tags:
+      - Customers
+    description: Deactivates a Customer
+    parameters:
+      - name: customer_id
+        in: path
+        description: ID of customer to deactivate
+        type: integer
+        required: true
+    responses:
+      200:
+        description: Customer Deactivated
+        schema:
+          $ref: '#/definitions/Customer'
+      400:
+        description: Bad Request (the posted data was not valid)
     """
     app.logger.info('Request to deactivate customer with id: %s', customer_id)
     customer = Customer.find(customer_id)
@@ -416,6 +429,23 @@ def activate(customer_id):
     """
     Activate a Customer
     This endpoint will activate a Customer
+    ---
+    tags:
+      - Customers
+    description: Activates a Customer
+    parameters:
+      - name: customer_id
+        in: path
+        description: ID of customer to activate
+        type: integer
+        required: true
+    responses:
+      200:
+        description: Customer Activated
+        schema:
+          $ref: '#/definitions/Customer'
+      400:
+        description: Bad Request (the posted data was not valid)
     """
     app.logger.info('Request to activate customer with id: %s', customer_id)
     customer = Customer.find(customer_id)
