@@ -39,6 +39,8 @@ On your own machine, visit: http://localhost:5000/
 exit
 vagrant halt
 ```
+## API DOCS
+- With the app running, on your own machine, visit: http://localhost:5000/apidocs
 
 ## API Routes
 
@@ -53,9 +55,6 @@ vagrant halt
 
 #### **Delete**
 - **DELETE** `/customers/{customer_id}`
-
-## API DOCS
-- With the app running, on your own machine, visit: http://localhost:5000/apidocs
 
 #### **List**
 - **GET** `/customers`
