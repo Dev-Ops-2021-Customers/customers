@@ -55,7 +55,7 @@ vagrant halt
 - **DELETE** `/customers/{customer_id}`
 
 ## API DOCS
-- With the app running, navigate to '/apidocs'
+- With the app running, on your own machine, visit: http://localhost:5000/apidocs
 
 #### **List**
 - **GET** `/customers`
