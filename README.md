@@ -54,6 +54,9 @@ vagrant halt
 #### **Delete**
 - **DELETE** `/customers/{customer_id}`
 
+## API DOCS
+- With the app running, navigate to '/apidocs'
+
 #### **List**
 - **GET** `/customers`
 
