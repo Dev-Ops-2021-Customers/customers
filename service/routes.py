@@ -8,6 +8,7 @@ import os
 import sys
 import logging
 from flask import Flask, jsonify, request, url_for, make_response, abort
+from flasgger import Swagger
 from flask_api import status  # HTTP Status Codes
 from werkzeug.exceptions import NotFound
 
@@ -18,6 +19,23 @@ from service.models import Customer, DataValidationError
 
 # Import Flask application
 from . import app
+
+# Configure Swagger before initilaizing it
+app.config['SWAGGER'] = {
+    "swagger_version": "2.0",
+    "specs": [
+        {
+            "version": "1.0.0",
+            "title": "Customer Demo REST API Service",
+            "description": "This is a sample Customer server.",
+            "endpoint": 'v1_spec',
+            "route": '/v1/spec'
+        }
+    ]
+}
+
+# Initialize Swagger after configuring it
+Swagger(app)
 
 ######################################################################
 # Error Handlers
@@ -119,6 +137,52 @@ def create_customers():
     """
     Creates a Customer
     This endpoint will create a Customer based the data in the body that is posted
+    ---
+    tags:
+      - Customers
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          id: data
+          required:
+            - name
+            - address
+            - phone_number
+            - email
+            - credit_card
+            - activate
+          properties:  
+            name:
+                type: string
+                description: the customers's name
+            address:
+                type: string
+                description: the address of customer (e.g., 55 Washington Way)
+            phone_number:
+                type: string
+                description: the phone number of customer (e.g., 555-156-1557)          
+            email:
+                type: string
+                description: the email of customer (e.g., swagger@test.com)
+            credit_card:
+                type: string
+                description: the credit card of customer (e.g., VISA)
+            active:
+                type: string
+                description: the status of customer (e.g., active)
+    responses:
+      201:
+        description: Customer created
+        schema:
+          $ref: '#/definitions/Customer'
+      400:
+        description: Bad Request (the posted data was not valid)
     """
     app.logger.info("Request to create a customer")
     check_content_type("application/json")
@@ -139,6 +203,24 @@ def get_customers(customer_id):
     """
     Retrieve a single Customer
     This endpoint will return a Customer based on it's id
+    ---
+    tags:
+      - Customers
+    produces:
+      - application/json
+    parameters:
+      - name: customer_id
+        in: path
+        description: ID of customer to retrieve
+        type: integer
+        required: true
+    responses:
+      200:
+        description: Customer returned
+        schema:
+          $ref: '#/definitions/Customer'
+      404:
+        description: Customer not found
     """
     app.logger.info("Request for customer with id: %s", customer_id)
     customer = Customer.find(customer_id)
@@ -155,6 +237,19 @@ def delete_customers(customer_id):
     """
     Delete a Customer
     This endpoint will delete a Customer based the id specified in the path
+     ---
+    tags:
+      - Customers
+    description: Deletes a Customer from the database
+    parameters:
+      - name: customer_id
+        in: path
+        description: ID of customer to delete
+        type: integer
+        required: true
+    responses:
+      204:
+        description: Customer deleted
     """
     app.logger.info("Request to delete customer with id: %s", customer_id)
     customer = Customer.find(customer_id)
@@ -167,7 +262,53 @@ def delete_customers(customer_id):
 ######################################################################
 @app.route("/customers", methods=["GET"])
 def list_customers():
-    """ Returns all of the Customers """
+    """ Returns all of the Customers 
+    This endpoint will return all Customers unless a query parameter is specified
+    ---
+    tags:
+      - Customers
+    description: The Customers endpoint allows you to query Customers by name
+    parameters:
+      - name: name
+        in: query
+        description: the name of Customer you are looking for
+        required: false
+        type: string
+    definitions:
+      Customer:
+        type: object
+        properties:
+          customer_id:
+            type: integer
+            description: unique id assigned internally by service
+          name:
+            type: string
+            description: the customers's name
+          address:
+            type: string
+            description: the address of customer (e.g., 55 Washington Way)
+          phone_number:
+            type: string
+            description: the phone number of customer (e.g., 555-156-1557)          
+          email:
+            type: string
+            description: the email of customer (e.g., swagger@test.com)
+          credit_card:
+            type: string
+            description: the credit card of customer (e.g., VISA)
+          active:
+            type: string
+            description: the status of customer (e.g., active)
+
+    responses:
+      200:
+        description: An array of Customers
+        schema:
+          type: array
+          items:
+            schema:
+              $ref: '#/definitions/Customer'
+    """
     app.logger.info("Request for customer list")
     customers = []
     name = request.args.get("name")
@@ -187,6 +328,51 @@ def update_customers(customer_id):
     """
     Update a Customers
     This endpoint will update a Customer based the body that is posted
+    ---
+    tags:
+      - Customers
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - name: customer_id
+        in: path
+        description: ID of customer to update
+        type: integer
+        required: true
+      - in: body
+        name: body
+        schema:  
+          required:
+            - name
+            - address
+            - phone_number
+            - email
+            - credit_card
+          properties:
+            name:
+                type: string
+                description: the customers's name
+            address:
+                type: string
+                description: the address of customer (e.g., 55 Washington Way)
+            phone_number:
+                type: string
+                description: the phone number of customer (e.g., 555-156-1557)          
+            email:
+                type: string
+                description: the email of customer (e.g., swagger@test.com)
+            credit_card:
+                type: string
+                description: the credit card of customer (e.g., VISA)
+    responses:
+      200:
+        description: Customer Updated
+        schema:
+          $ref: '#/definitions/Customer'
+      400:
+        description: Bad Request (the posted data was not valid)
     """
     app.logger.info("Request to update customer with id: %s", customer_id)
     check_content_type("application/json")
@@ -207,6 +393,23 @@ def deactivate(customer_id):
     """
     Deactivate a Customer
     This endpoint will deactivate a Customer
+    ---
+    tags:
+      - Customers
+    description: Deactivates a Customer
+    parameters:
+      - name: customer_id
+        in: path
+        description: ID of customer to deactivate
+        type: integer
+        required: true
+    responses:
+      200:
+        description: Customer Deactivated
+        schema:
+          $ref: '#/definitions/Customer'
+      400:
+        description: Bad Request (the posted data was not valid)
     """
     app.logger.info('Request to deactivate customer with id: %s', customer_id)
     customer = Customer.find(customer_id)
@@ -226,6 +429,23 @@ def activate(customer_id):
     """
     Activate a Customer
     This endpoint will activate a Customer
+    ---
+    tags:
+      - Customers
+    description: Activates a Customer
+    parameters:
+      - name: customer_id
+        in: path
+        description: ID of customer to activate
+        type: integer
+        required: true
+    responses:
+      200:
+        description: Customer Activated
+        schema:
+          $ref: '#/definitions/Customer'
+      400:
+        description: Bad Request (the posted data was not valid)
     """
     app.logger.info('Request to activate customer with id: %s', customer_id)
     customer = Customer.find(customer_id)
