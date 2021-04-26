@@ -13,12 +13,12 @@ before_install:
     couchdb:latest
   - docker ps -a
 
+# command to install dependencies
+install: "pip install -r requirements.txt"
+
 env:
   global:
   - DATABASE_URI='postgres://postgres:@localhost:5432/testdb'
-
-# command to install dependencies
-install: "pip install -r requirements.txt"
 
 before_script:
   - psql -c 'create database testdb;' -U postgres
