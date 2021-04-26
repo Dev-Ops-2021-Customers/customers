@@ -1,12 +1,9 @@
 language: python
 python:
-  - "3.6"
+  - "3.8"
 
 services:
   - postgresql
-
-# command to install dependencies
-install: "pip install -r requirements.txt"
 
 # We need to run our own couchdb because Travis doesn't use credentials
 before_install:
@@ -14,6 +11,9 @@ before_install:
   - docker run -d --name couchdb -p 5432:5432 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=pass
     couchdb:latest
   - docker ps -a
+
+# command to install dependencies
+install: "pip install -r requirements.txt"
 
 
 env:
