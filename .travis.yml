@@ -8,7 +8,7 @@ services:
 # We need to run our own couchdb because Travis doesn't use credentials
 before_install:
   - docker pull couchdb:latest
-  - docker run -d --name couchdb -p 5984:5984 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=pass
+  - docker run -d --name couchdb -p 5342:5342 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=pass
     couchdb:latest
   - docker ps -a
 
@@ -39,7 +39,7 @@ jobs:
             - python3-selenium
       before_script:
         - chromedriver --version
-        - curl -X GET http://localhost:5000/
+        - curl -X GET http://localhost:5432/
         - curl -X PUT http://admin:pass@localhost:5432/test
         - gunicorn --log-level=critical --bind=127.0.0.1:5000 service:app &  # start a Web server in the background
         - sleep 5 # give Web server some time to bind to sockets, etc
