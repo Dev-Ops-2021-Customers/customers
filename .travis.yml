@@ -8,6 +8,13 @@ services:
 # command to install dependencies
 install: "pip install -r requirements.txt"
 
+# We need to run our own couchdb because Travis doesn't use credentials
+before_install:
+  - docker pull couchdb:latest
+  - docker run -d --name couchdb -p 5984:5984 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=pass
+    couchdb:latest
+  - docker ps -a
+
 env:
   global:
   - DATABASE_URI='postgres://postgres:@localhost:5432/testdb'
