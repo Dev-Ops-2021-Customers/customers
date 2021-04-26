@@ -9,7 +9,7 @@ services:
 # We need to run our own couchdb because Travis doesn't use credentials
 before_install:
   - docker pull couchdb:latest
-  - docker run -d --name couchdb -p 5342:5342 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=pass
+  - docker run -d --name couchdb -p 5432:5432 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=pass
     couchdb:latest
   - docker ps -a
 
@@ -20,8 +20,8 @@ env:
 # command to install dependencies
 install: "pip install -r requirements.txt"
 
-#before_script:
-#  - psql -c 'create database testdb;' -U postgres
+before_script:
+  - psql -c 'create database testdb;' -U postgres
 
 # command to run tests
 jobs:
