@@ -3,6 +3,7 @@ python:
   - "3.8"
 
 services:
+  - docker
   - postgresql
 
 # We need to run our own couchdb because Travis doesn't use credentials
