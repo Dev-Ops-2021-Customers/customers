@@ -5,6 +5,9 @@ python:
 services:
   - postgresql
 
+addons:
+  chrome: stable
+
 env:
   global:
   - DATABASE_URI='postgres://postgres:@localhost:5432/testdb'
@@ -13,8 +16,8 @@ cache: pip
 
 # command to install dependencies
 install: 
-  - "pip install -r requirements.txt"
-
+  - pip install -r requirements.txt
+  - sudo apt-get install -y chromium-chromedriver python3-selenium
 
 before_script:
   - psql -c 'create database testdb;' -U postgres
@@ -33,11 +36,5 @@ jobs:
 
     - stage: Test
       name: BDD
-      addons:
-        chrome: stable
-        apt:
-          packages:
-            - chromium-chromedriver 
-            - python3-selenium
       script:
         - behave
