@@ -3,7 +3,7 @@ applications:
 - name: nyu-customer-service-s21
   path: .
   instances: 2
-  memory: 256M
+  memory: 512M
   routes:
   - route: nyu-customer-service-s21.us-south.cf.appdomain.cloud
   disk_quota: 1024M

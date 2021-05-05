@@ -111,8 +111,8 @@ def step_impl(context, name):
 
 @then('I should see the message "{message}"')
 def step_impl(context, message):
-    # context.driver.save_screenshot('debug.png')
-    element = context.driver.find_element_by_id('flash_message')
+    # # context.driver.save_screenshot('debug.png')
+    # element = context.driver.find_element_by_id('flash_message')
     # expect(element.text).to_contain(message)
     found = WebDriverWait(context.driver, WAIT_SECONDS).until(
         expected_conditions.text_to_be_present_in_element(
