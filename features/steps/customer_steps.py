@@ -16,7 +16,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions
 
-WAIT_SECONDS = int(getenv('WAIT_SECONDS', '60'))
+WAIT_SECONDS = int(getenv('WAIT_SECONDS', '600'))
 ID_PREFIX = 'customer_'
 
 @given('the following customers')

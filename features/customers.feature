@@ -107,10 +107,8 @@ Scenario: Deactivate a Customer
     When I visit the "Home Page"
     And I set the "name" to "kelly"
     And I press the "Search" button
-    And I copy the "id" field
-    And I press the "Clear" button
-    And I paste the "id" field
-    And I press the "Deactivate" button
+    Then I should see "kelly@catan.com" in the "email" field
+    When I press the "Deactivate" button
     Then I should see the message "Customer deactivated."
     And I should see "False" in the "Active" dropdown
 
@@ -118,10 +116,8 @@ Scenario: Activate a Customer
     When I visit the "Home Page"
     And I set the "name" to "kelly"
     And I press the "Search" button
-    And I copy the "id" field
-    And I press the "Clear" button
-    And I paste the "id" field
-    And I press the "Deactivate" button
+    Then I should see "kelly@catan.com" in the "email" field
+    When I press the "Deactivate" button
     And I press the "Activate" button
     Then I should see the message "Customer activated."
     And I should see "True" in the "Active" dropdown
