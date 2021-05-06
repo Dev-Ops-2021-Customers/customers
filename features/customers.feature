@@ -118,6 +118,7 @@ Scenario: Activate a Customer
     And I press the "Search" button
     Then I should see "kelly@catan.com" in the "email" field
     When I press the "Deactivate" button
-    And I press the "Activate" button
+    Then I should see the message "Customer deactivated."
+    When I press the "Activate" button
     Then I should see the message "Customer activated."
     And I should see "True" in the "Active" dropdown
